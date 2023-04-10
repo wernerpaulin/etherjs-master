@@ -9,19 +9,10 @@ const tolenAbi = '[{"constant":true,"inputs":[],"name":"name","outputs":[{"name"
 const contract = new ethers.Contract(tokenAddress, tolenAbi, provider)
 
 async function main() {
-    const name = await contract.name()
-    const symbol = await contract.symbol()
-    const totalSupply = await contract.totalSupply()
     const decimals = await contract.decimals()
-
-    const balanceOf = await contract.balanceOf('vitalik.eth')
-    console.log(ethers.utils.formatUnits(balanceOf, decimals))
-
-    console.log(name)
-    console.log(symbol)
-    console.log(decimals)
-    console.log(ethers.utils.formatUnits(totalSupply, decimals))
-
+    contract.on("Transfer", (from, to, value, data) => {
+        console.log(from, to, ethers.utils.formatUnits(value, decimals), data)
+    })
 
 }
 
